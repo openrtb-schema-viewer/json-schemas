@@ -1,0 +1,5 @@
+Value,Description
+">0","Mid-Roll (value indicates start delay in second)"
+"0","Pre-Roll"
+"-1","Generic Mid-Roll"
+"-2","Generic Post-Roll"

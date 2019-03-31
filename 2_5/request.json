@@ -21,7 +21,6 @@
 			}
 		]
 	},
-	"example": "samp.json",
 	"additionalProperties": false,
 	"properties": {
 		"id": {

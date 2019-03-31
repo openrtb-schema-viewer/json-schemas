@@ -1,0 +1,8 @@
+Value,Description
+1,"Video (i.e., video file or stream such as Internet TV broadcasts)"
+2,"Game (i.e., an interactive software game)
+3,"Music (i.e., audio file or stream such as Internet radio broadcasts)"
+4,"Application (i.e., an interactive software application)"
+5,"Text (i.e., primarily textual document such as a web page, eBook, or news article)"
+6,"Other (i.e., none of the other categories applies)"
+7,"Unknown"

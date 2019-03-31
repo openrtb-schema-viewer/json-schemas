@@ -1,0 +1,6 @@
+Value,Description
+1,"In-Stream<br>Played before, during or after the streaming video content that the consumer has requested (e.g., Pre-roll, Mid-roll, Post-roll)."
+2,"In-Banner<br>Exists within a web banner that leverages the banner space to deliver a video experience as opposed to another static or rich media format. The format relies on the existence of display ad inventory on the page for its delivery."
+3,"In-Article<br>Loads and plays dynamically between paragraphs of editorial content; existing as a standalone branded message."
+4,"In-Feed - Found in content, social or product feeds."
+5,"Interstitial/Slider/Floating<br>Covers the entire or a portion of screen area, but is always on screen while displayed (i.e. cannot be scrolled out of view). Note that a full-screen interstitial(e.g., inmobile)can be distinguished from a floating/slider unit by the “imp.instl” field."
