@@ -1,0 +1,1954 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"title": "root",
+	"description": "json schema for an openrtb v2.5 bid request",
+	"type": "object",
+	"required": [
+		"id",
+		"imp"
+	],
+	"not": {
+		"allOf": [
+			{
+				"required": [
+					"site"
+				]
+			},
+			{
+				"required": [
+					"app"
+				]
+			}
+		]
+	},
+	"example": "samp.json",
+	"additionalProperties": false,
+	"properties": {
+		"id": {
+			"type": "string",
+			"description": "Unique ID of the bid request, provided by the exchange."
+		},
+		"imp": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/imp"
+			},
+			"description": "Array of “Imp” objects representing the impressions offered. At least 1 “Imp” object is required."
+		},
+		"site": {
+			"$ref": "#/definitions/site",
+			"description": "Details via a “Site” object about the publisher’s website. Only applicable and recommended for websites."
+		},
+		"app": {
+			"$ref": "#/definitions/app",
+			"description": "Details via an “App” object about the publisher’s app (i.e., non-browser applications). Only applicable and recommended for apps."
+		},
+		"device": {
+			"$ref": "#/definitions/device",
+			"description": "Details via a “Device” object about the user’s device to which the impression will be delivered."
+		},
+		"user": {
+			"$ref": "#/definitions/user",
+			"description": "Details via a “User” about the human user of the device; the advertising audience."
+		},
+		"test": {
+			"$ref": "#/definitions/boolean_int",
+			"description": "Indicator of test mode in which auctions are not billable, where 0 = live mode, 1 = test mode."
+		},
+		"at": {
+			"type": "integer",
+			"description": "Auction type, where 1 = First Price, 2 = Second Price Plus. Exchange-specific auction types can be defined using values greater than 500."
+		},
+		"tmax": {
+			"$ref": "#/definitions/positive_int",
+			"description": "Maximum time in milliseconds the exchange allows for bids to be received including internet latency to avoid timeout. This value supersedes any a priori guidance from the exchange."
+		},
+		"wseat": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "White list of buyer seats (e.g., advertisers, agencies) allowed to bid on this impression. IDs of seats and knowledge of the buyer’s customers to which they refer must be coordinated between bidders and the exchange a priori. At most, only one of “wseat” and “bseat” should be used in the same request. Omission of both implies no seat restrictions."
+		},
+		"bseat": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "Block list of buyer seats (e.g., advertisers, agencies) restricted from bidding on this impression. IDs of seats and knowledge of the buyer’s customers to which they refer must be coordinated between bidders and the exchange a priori. At most, only one of wseat and bseat should be used in the same request. Omission of both implies no seat restrictions."
+		},
+		"allimps": {
+			"$ref": "#/definitions/boolean_int",
+			"description": "Flag to indicate if exchange can verify that the impressions offered represent all of the impressions available in context (e.g., all on the web page, all video spots such as pre/mid/postroll) to support road-blocking. 0 = no or unknown, 1 = yes, the impressions offered represent all that are available."
+		},
+		"cur": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/currency"
+			},
+			"description": "Array of allowed currencies for bids on this bid request using ISO-4217 alpha codes. Recommended only if the exchange accepts multiple currencies."
+		},
+		"wlang": {
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/language"
+			},
+			"description": "White list of languages for creatives using ISO-639-1-alpha-2. Omission implies no specific restrictions, but buyers would be advised to consider language attribute in the “Device” and/or “Content” objects if available."
+		},
+		"bcat": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "Blocked advertiser categories using the IAB content categories."
+		},
+		"badv": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "Block list of advertisers by their domains (e.g., “ford.com”)."
+		},
+		"bapp": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"description": "Block list of applications by their platform-specific exchange-independent application identifiers. On Android, these should be bundle or package names (e.g., com.foo.mygame). On iOS, these are numeric IDs."
+		},
+		"source": {
+			"$ref": "#/definitions/source",
+			"description": "A “Source” object that provides data about the inventory source and which entity makes the final decision."
+		},
+		"regs": {
+			"$ref": "#/definitions/regs",
+			"description": "A “Regs” object that specifiesany industry, legal, or governmental regulations in force for this request."
+		},
+		"ext": {
+			"type": "object",
+			"description": "Placeholder for exchange-specific extensions to OpenRTB."
+		}
+	},
+	"definitions": {
+		"imp": {
+			"type": "object",
+			"required": [
+				"id"
+			],
+			"anyOf": [
+				{
+					"required": [
+						"banner"
+					]
+				},
+				{
+					"required": [
+						"video"
+					]
+				},
+				{
+					"required": [
+						"audio"
+					]
+				},
+				{
+					"required": [
+						"native"
+					]
+				}
+			],
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "A unique identifier for this impression within the context of the bid request. Typically, starts with 1 and increments."
+				},
+				"metric": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/metric"
+					},
+					"description": "An array of “Metric” object."
+				},
+				"banner": {
+					"$ref": "#/definitions/banner",
+					"description": "A “Banner” object required if this impression is offered as a banner ad opportunity."
+				},
+				"video": {
+					"$ref": "#/definitions/video",
+					"description": "A “Video” object; required if this impression is offered as a video ad opportunity."
+				},
+				"audio": {
+					"$ref": "#/definitions/audio",
+					"description": "An “Audio” object; required if this impression is offered as an audio ad opportunity."
+				},
+				"native": {
+					"$ref": "#/definitions/native",
+					"description": "A “Native” object; required if this impression is offered as a native ad opportunity."
+				},
+				"pmp": {
+					"$ref": "#/definitions/pmp",
+					"description": "A “Pmp” object containing any private marketplace deals in effect for this impression."
+				},
+				"displaymanager": {
+					"type": "string",
+					"description": "Name of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps."
+				},
+				"displaymanagerver": {
+					"type": "string",
+					"description": "Version of ad mediation partner, SDK technology, or player responsible for rendering ad (typically video or mobile). Used by some ad servers to customize ad code by partner. Recommended for video and/or apps."
+				},
+				"instl": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "1 = the ad is interstitial or full screen, 0 = not interstitial."
+				},
+				"tagid": {
+					"type": "string",
+					"description": "Identifier for specific ad placement or ad tag that was used to initiate the auction. This can be useful for debugging of any issues, or for optimization by the buyer."
+				},
+				"bidfloor": {
+					"type": "number",
+					"minimum": 0,
+					"description": "Minimum bid for this impression expressed in CPM."
+				},
+				"bidfloorcur": {
+					"$ref": "#/definitions/currency",
+					"description": "Currency specified using ISO-4217 alpha codes. This may be different from bid currency returned by bidder if this is allowed by the exchange."
+				},
+				"clickbrowser": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates the type of browser opened upon clicking the creative in an app, where 0 = embedded, 1 = native. Note that the Safari View Controller in iOS 9.x devices is considered a native browser for purposes of this attribute."
+				},
+				"secure": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Flag to indicate if the impression requires secure HTTPS URL creative assets and markup, where 0 = non-secure, 1 = secure. If omitted, the secure state is unknown, but non-secure HTTP support can be assumed."
+				},
+				"iframebuster": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Array of exchange-specific names of supported iframe busters."
+				},
+				"exp": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Advisory as to the number of seconds that may elapse between the auction and the actual impression."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"metric": {
+			"type": "object",
+			"required": [
+				"type",
+				"value"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"type": {
+					"type": "string",
+					"description": "Type of metric being presented using exchange curated string names which should be published to bidders a priori."
+				},
+				"value": {
+					"type": "number",
+					"minimum": 0.0,
+					"maximum": 1.0,
+					"description": "Number representing the value of the metric. Probabilities must be in the range 0.0 - 1.0."
+				},
+				"vendor": {
+					"type": "string",
+					"description": "Source of the value using exchange curated string names which should be published to bidders a priori. If the exchange itself is the source versus a third party, “EXCHANGE” is recommended."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"banner": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"format": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/format"
+					},
+					"description": "Array of “Format” objects representing the banner sizes permitted. If none are specified, then use of the “h” and “w” attributes is highly recommended."
+				},
+				"w": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Exact width in device independent pixels (DIPS); recommended if no “format” objects are specified."
+				},
+				"h": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Exact width in device independent pixels (DIPS); recommended if no “format” objects are specified."
+				},
+				"wmax": {
+					"$ref": "#/definitions/positive_int",
+					"description": "NOTE: Deprecated in favor of the “format” array. Maximum width in device independent pixels (DIPS)."
+				},
+				"hmax": {
+					"$ref": "#/definitions/positive_int",
+					"description": "NOTE: Deprecated in favor of the “format” array. Maximum height in device independent pixels (DIPS)."
+				},
+				"wmin": {
+					"$ref": "#/definitions/positive_int",
+					"description": "NOTE: Deprecated in favor of the “format” array. Minimum width in device independent pixels (DIPS)."
+				},
+				"hmin": {
+					"$ref": "#/definitions/positive_int",
+					"description": "NOTE: Deprecated in favor of the “format” array. Minimum height in device independent pixels (DIPS)."
+				},
+				"btype": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/banner_ad_type"
+					},
+					"description": "Blocked banner ad types."
+				},
+				"battr": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/creative_attribute"
+					},
+					"description": "Blocked creative attributes."
+				},
+				"pos": {
+					"$ref": "#/definitions/ad_position",
+					"description": "Ad position on screen."
+				},
+				"mimes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Content MIME types supported. Popular MIME types may include “application/x-shockwave-flash”, “image/jpg” and “image/gif”."
+				},
+				"topframe": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the banner is in the top frame as opposed to an iframe, where 0 = no, 1 = yes."
+				},
+				"expdir": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/expandable_direction"
+					},
+					"description": "Directions in which the banner may expand."
+				},
+				"api": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/api_framework"
+					},
+					"description": "List of supported API frameworks for this impression. If an API is not explicitly listed, it is assumed not to be supported."
+				},
+				"id": {
+					"type": "string",
+					"description": "Unique identifier for this banner object. Recommended when “Banner” objects are used with a “Video” object to represent an array of companion ads. Values usually start at 1 and increase with each object; should be unique within an impression."
+				},
+				"vcm": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Relevant only for “Banner” objects used with a “Video” object in an array of companion ads. Indicates the companion banner rendering mode relative to the associated video, where 0 = concurrent, 1 = end-card."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"video": {
+			"type": "object",
+			"required": [
+				"mimes"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"mimes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Content MIME types supported (e.g., “video/x-ms-wmv”, “video/mp4”)."
+				},
+				"minduration": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Minimum video ad duration in seconds."
+				},
+				"maxduration": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Maximum video ad duration in seconds."
+				},
+				"protocol": {
+					"$ref": "#/definitions/video_bid_response_protocol",
+					"description": "Array of supported video protocols. At least one supported protocol must be specified in either the protocol” or protocols” attribute."
+				},
+				"protocols": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/video_bid_response_protocol"
+					},
+					"description": "NOTE: Deprecated in favor of “protocols”. Supported video protocol. At least one supported protocol must be specified in either the “protocol” or “protocols” attribute."
+				},
+				"w": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Width of the video player in device independent pixels (DIPS)."
+				},
+				"h": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Height of the video player in device independent pixels (DIPS)."
+				},
+				"startdelay": {
+					"$ref": "#/definitions/video_start_delay",
+					"description": "Indicates the start delay in seconds for pre-roll, mid-roll or post-roll ad placements."
+				},
+				"placement": {
+					"$ref": "#/definitions/video_placement_type",
+					"description": "Placement type for the impression."
+				},
+				"linearity": {
+					"$ref": "#/definitions/video_linearity",
+					"description": "Indicates if the impression must be linear, nonlinear, etc. If none specified, assume all are allowed."
+				},
+				"skip": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the player will allow the video to be skipped, where 0 = no, 1 = yes. If a bidder sends markup/creative that is itself skippable, the Bid object should include the “attr” array with an element of 16 indicating skippable video. "
+				},
+				"skipmin": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Videos of total duration greater than this number of seconds can be skippable; only applicable if the ad is skippable."
+				},
+				"skipafter": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Number of seconds a video must play before skipping is enabled; only applicable if the ad is skippable."
+				},
+				"sequence": {
+					"type": "integer",
+					"description": "If multiple ad impressions are offered in the same bid request, the sequence number will allow for the coordinated delivery of multiple creatives."
+				},
+				"battr": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/creative_attribute"
+					},
+					"description": "Blocked creative attributes."
+				},
+				"maxextended": {
+					"type": "integer",
+					"minimum": -1,
+					"description": "Maximum extended ad duration if extension is allowed. If blank or 0, extension is not allowed. If -1, extension is allowed, and there is no time limit imposed. If greater than 0, then the value represents the number of seconds of extended play supported beyond the “maxduration” value."
+				},
+				"minbitrate": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Minimum bit rate in Kbps."
+				},
+				"maxbitrate": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Maximum bit rate in Kbps."
+				},
+				"boxingallowed": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if letter-boxing of 4:3 content into a 16:9 window is allowed, where 0 = no, 1 = yes."
+				},
+				"playbackmethod": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/video_playback_method"
+					},
+					"description": "Playback methods that may be in use. If none are specified, any method may be used. Only one method is typically used in practice. As a result, this array may be converted to an integer in a future version of the specification. It is strongly advised to use only the first element of this array in preparation for this change."
+				},
+				"playbackend": {
+					"$ref": "#/definitions/video_playback_cessation_mode",
+					"description": "The event that causes playback to end."
+				},
+				"delivery": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_delivery_method"
+					},
+					"description": "Supported delivery methods (e.g., streaming, progressive). If none specified, assume all are supported."
+				},
+				"pos": {
+					"$ref": "#/definitions/ad_position",
+					"description": "Ad position on screen."
+				},
+				"companionad": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/banner"
+					},
+					"description": "Array of “Banner” objects if companion ads are available."
+				},
+				"api": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/api_framework"
+					},
+					"description": "List of supported API frameworks for this impression. If an API is not explicitly listed, it is assumed not to be supported."
+				},
+				"companiontype": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vast_companion_type"
+					},
+					"description": "Supported VAST companion ad types. Recommended if companion “Banner” objects are included via the “companionad” array. If one of these banners will be rendered as an end-card, this can be specified using the “vcm” attribute with the particular banner."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"audio": {
+			"type": "object",
+			"required": [
+				"mimes"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"mimes": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Content MIME types supported (e.g., “audio/mp4”)"
+				},
+				"minduration": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Minimum audioad duration in seconds."
+				},
+				"maxduration": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Maximum audioad duration in seconds."
+				},
+				"protocols": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/video_bid_response_protocol"
+					},
+					"description": "Array of supported audio protocols."
+				},
+				"startdelay": {
+					"$ref": "#/definitions/video_start_delay",
+					"description": "Indicates the start delay in seconds for pre-roll, mid-roll or post-roll ad placements."
+				},
+				"sequence": {
+					"type": "integer",
+					"description": "If multiple ad impressions are offered in the same bid request, the sequence number will allow for the coordinated delivery of multiple creatives."
+				},
+				"battr": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/creative_attribute"
+					},
+					"description": "Blocked creative attributes."
+				},
+				"maxextended": {
+					"type": "integer",
+					"minimum": -1,
+					"description": "Maximum extended ad duration if extension is allowed. If blank or 0, extension is not allowed.If -1, extension is allowed, and there is no time limit imposed. If greater than 0, then the value represents the number of seconds of extended play supported beyond the “maxduration” value."
+				},
+				"minbitrate": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Minimum bit rate in Kbps."
+				},
+				"maxbitrate": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Maximum bit rate in Kbps."
+				},
+				"delivery": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_delivery_method"
+					},
+					"description": "Supported delivery methods (e.g., streaming, progressive). If none specified, assume all are supported."
+				},
+				"companionad": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/banner"
+					},
+					"description": "Array of “Banner” objects if companion ads are available."
+				},
+				"api": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/api_framework"
+					},
+					"description": "List of supported API frameworks for this impression. If an API is not explicitly listed,it is assumed not to be supported."
+				},
+				"companiontype": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/vast_companion_type"
+					},
+					"description": "Supported DAAST companion ad types. Recommended if companion “Banner” objects are included via the “companionad” array."
+				},
+				"maxseq": {
+					"$ref": "#/definitions/positive_int",
+					"description": "The maximum number of ads that canbe played in an ad pod."
+				},
+				"feed": {
+					"$ref": "#/definitions/audio_feed_type",
+					"description": "Type of audio feed."
+				},
+				"stitched": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the ad is stitched with audio content or delivered independently, where 0 = no, 1 = yes."
+				},
+				"nvol": {
+					"$ref": "#/definitions/volume_normalization_mode",
+					"description": "Volume normalization mode."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"native": {
+			"type": "object",
+			"required": [
+				"request"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"request": {
+					"type": "string",
+					"description": "Request payload complying with the Native Ad Specification."
+				},
+				"ver": {
+					"type": "string",
+					"description": "Version of the Dynamic Native Ads API to which “request” complies; highly recommended for efficient parsing."
+				},
+				"api": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/api_framework"
+					},
+					"description": "List of supported API frameworks for this impression. If an API is not explicitly listed,it is assumed not to be supported."
+				},
+				"battr": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/creative_attribute"
+					},
+					"description": "Blocked creative attributes."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"format": {
+			"type": "object",
+			"description": "represents an allowed size for a banner impression",
+			"additionalProperties": false,
+			"properties": {
+				"w": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Width in device independent pixels (DIPS)."
+				},
+				"h": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Height in device independent pixels (DIPS)."
+				},
+				"wratio": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Relative width when expressing size as a ratio."
+				},
+				"hratio": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Relative heightwhen expressing size as a ratio."
+				},
+				"wmin": {
+					"$ref": "#/definitions/positive_int",
+					"description": "The minimum width in device independent pixels (DIPS) at which the ad will be displayed the size is expressed as a ratio."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"site": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Exchange-specific site ID."
+				},
+				"name": {
+					"type": "string",
+					"description": "Site name (may be aliased at the publisher’s request)."
+				},
+				"domain": {
+					"type": "string",
+					"description": "Domainof the site (e.g., “mysite.foo.com”)."
+				},
+				"cat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories of the site."
+				},
+				"sectioncat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the current section of the site."
+				},
+				"pagecat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the current page or view of the site."
+				},
+				"page": {
+					"type": "string",
+					"description": "URL of the page where the impression will be shown."
+				},
+				"ref": {
+					"type": "string",
+					"description": "Referrer URL that caused navigation to the current page."
+				},
+				"search": {
+					"type": "string",
+					"description": "Search string that caused navigation to the current page."
+				},
+				"mobile": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the site has been programmed to optimize layout when viewed on mobile devices, where 0 = no, 1 = yes."
+				},
+				"privacypolicy": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the site has a privacy policy, where 0 = no, 1 = yes."
+				},
+				"publisher": {
+					"$ref": "#/definitions/publisher",
+					"description": "Details about the “Publisher” of the site."
+				},
+				"content": {
+					"$ref": "#/definitions/content",
+					"description": "Details about the “Content” within the site."
+				},
+				"keywords": {
+					"type": "string",
+					"description": "Comma separated list of keywordsabout the site."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"app": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Exchange-specific app ID."
+				},
+				"name": {
+					"type": "string",
+					"description": "App name (may be aliasedat the publisher’s request)."
+				},
+				"bundle": {
+					"type": "string",
+					"description": "A platform-specific application identifier intended to be unique to the app and independent of the exchange. On Android, this should be a bundle or package name (e.g., com.foo.mygame). On iOS, it is typically a numeric ID."
+				},
+				"domain": {
+					"type": "string",
+					"description": "Domain of the app (e.g., “mygame.foo.com”)."
+				},
+				"storeurl": {
+					"type": "string",
+					"description": "App store URL for an installed app; for IQG 2.1 compliance."
+				},
+				"cat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories of the app."
+				},
+				"sectioncat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the current section of the app."
+				},
+				"pagecat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the current page or view of the app."
+				},
+				"ver": {
+					"type": "string",
+					"description": "Application version."
+				},
+				"privacypolicy": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the app has a privacy policy, where 0 = no, 1 = yes."
+				},
+				"paid": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "0 = app is free, 1 = the app is a paid version."
+				},
+				"publisher": {
+					"$ref": "#/definitions/publisher",
+					"description": "Details about the “Publisher” of the app."
+				},
+				"content": {
+					"$ref": "#/definitions/content",
+					"description": "Details about the “Content” within the app."
+				},
+				"keywords": {
+					"type": "string",
+					"description": "Comma separated list of keywordsabout the app."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"publisher": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Exchange-specific publisher ID."
+				},
+				"name": {
+					"type": "string",
+					"description": "Publisher name (may be aliasedat the publisher’s request)."
+				},
+				"cat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the publisher."
+				},
+				"domain": {
+					"type": "string",
+					"description": "Highest level domainof the publisher (e.g., “publisher.com”)."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"content": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "ID uniquely identifying the content."
+				},
+				"episode": {
+					"type": "integer",
+					"description": "Episode number."
+				},
+				"title": {
+					"type": "string",
+					"description": "Content title. Video Examples: “Search Committee” (television), “A New Hope” (movie) or “Endgame” (made for web). Non-Video Example: “Why an Antarctic Glacier Is Melting So Quickly” (Time magazine article)."
+				},
+				"series": {
+					"type": "string",
+					"description": "Content series. Video Examples: “The Office” (television), “Star Wars” (movie) or “Arby ‘N’ The Chief” (made for web). Non-Video Example: “Ecocentric” (Time Magazine blog)."
+				},
+				"season": {
+					"type": "string",
+					"description": "Content season (e.g., “Season 3”)."
+				},
+				"artist": {
+					"type": "string",
+					"description": "Artist credited with the content."
+				},
+				"genre": {
+					"type": "string",
+					"description": "Genre that best describes the content (e.g.,rock, pop, etc)."
+				},
+				"album": {
+					"type": "string",
+					"description": "Album to which the content belongs; typically for audio."
+				},
+				"isrc": {
+					"type": "string",
+					"description": "International Standard Recording Code conforming to ISO-3901."
+				},
+				"producer": {
+					"$ref": "#/definitions/producer",
+					"description": "Details about the content “Producer”."
+				},
+				"url": {
+					"type": "string",
+					"description": "URL of the content, for buy-side contextualization or review."
+				},
+				"cat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the content producer."
+				},
+				"prodq": {
+					"$ref": "#/definitions/production_quality",
+					"description": "Production quality."
+				},
+				"videoquality": {
+					"$ref": "#/definitions/production_quality",
+					"description": "Note: Deprecated in favor of “prodq”. Video quality."
+				},
+				"context": {
+					"$ref": "#/definitions/content_context",
+					"description": "Type of content (game, video, text, etc.)."
+				},
+				"contentrating": {
+					"type": "string",
+					"description": "Content rating (e.g., MPAA)."
+				},
+				"userrating": {
+					"type": "string",
+					"description": "User rating of the content (e.g., number of stars, likes, etc.)."
+				},
+				"qagmediarating": {
+					"$ref": "#/definitions/qag_media_rating",
+					"description": "Media rating per IQG guidelines."
+				},
+				"keywords": {
+					"type": "string",
+					"description": "Comma separated list of keywords describing the content."
+				},
+				"livestream": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "0 = not live, 1 = content is live (e.g., stream, live blog)."
+				},
+				"sourcerelationship": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "0 = indirect, 1 = direct."
+				},
+				"len": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Length of content in seconds; appropriate for video or audio."
+				},
+				"language": {
+					"$ref": "#/definitions/language",
+					"description": "Content language using ISO-639-1-alpha-2."
+				},
+				"embeddable": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicator of whether ornot the content is embeddable (e.g., an embeddable video player), where 0 = no, 1 = yes."
+				},
+				"data": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/data"
+					},
+					"description": "Additional content data. Each “Data” object represents a different data source."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"producer": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Content producer or originator ID. Useful if content is syndicated and may be posted on a site using embed tags."
+				},
+				"name": {
+					"type": "string",
+					"description": "Content producer or originator name(e.g., “Warner Bros”)."
+				},
+				"cat": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/content_category"
+					},
+					"description": "Array of IAB content categories that describe the content producer."
+				},
+				"domain": {
+					"type": "string",
+					"description": "Highest level domain of the content producer(e.g., “producer.com”)."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"device": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"ua": {
+					"type": "string",
+					"description": "Browser user agent string."
+				},
+				"geo": {
+					"$ref": "#/definitions/geo",
+					"description": "Location of the device assumed to be the user’s current location defined by a “Geo” object."
+				}, 
+				"dnt": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Standard “Do Not Track” flag as set in the header by the browser, where 0 = tracking is unrestricted, 1 = do not track."
+				},
+				"lmt": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "“Limit Ad Tracking” signal commercially endorsed (e.g., iOS, Android), where 0 = tracking is unrestricted, 1 = tracking must be limited per commercial guidelines."
+				},
+				"ip": {
+					"type": "string",
+					"format": "ipv4",
+					"description": "IPv4 addressclosest to device."
+				},
+				"ipv6": {
+					"type": "string",
+					"format": "ipv6",
+					"description": "IP address closest to device as IPv6."
+				},
+				"devicetype": {
+					"$ref": "#/definitions/device_type",
+					"description": "The general type of device."
+				},
+				"make": {
+					"type": "string",
+					"description": "Device make (e.g., “Apple”)."
+				},
+				"model": {
+					"type": "string",
+					"description": "Device model (e.g., “iPhone”)."
+				},
+				"os": {
+					"type": "string",
+					"description": "Device operating system (e.g., “iOS”)."
+				},
+				"osv": {
+					"type": "string",
+					"description": "Device operating system version (e.g., “3.1.2”)."
+				},
+				"hwv": {
+					"type": "string",
+					"description": "Hardware version of the device (e.g., “5S” for iPhone 5S)."
+				},
+				"h": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Physical height of the screen in pixels."
+				},
+				"w": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Physical width of the screen in pixels."
+				},
+				"ppi": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Screen size as pixels per linear inch."
+				},
+				"pxratio": {
+					"type": "number",
+					"description": "The ratio of physical pixels to device independent pixels."
+				},
+				"js": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Support for JavaScript, where 0 = no, 1 = yes."
+				},
+				"geofetch": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Indicates if the geolocation API will be available to JavaScript code running in the banner, where 0 = no, 1 = yes."
+				},
+				"flashver": {
+					"type": "string",
+					"description": "Version of Flash supported by the browser."
+				},
+				"language": {
+					"$ref": "#/definitions/language",
+					"description": "Browser language using ISO-639-1-alpha-2."
+				},
+				"carrier": {
+					"type": "string",
+					"description": "Carrier or ISP (e.g., “VERIZON”) using exchange curated string names which should be published to bidders a priori."
+				},
+				"mccmnc": {
+					"type": "string",
+					"description": "Mobile carrier as the concatenated MCC-MNC code (e.g., “310-005” identifies Verizon Wireless CDMA in the USA). Refer to https://en.wikipedia.org/wiki/Mobile_country_code for further examples. Note that the dash between the MCC and MNC parts is required to remove parsing ambiguity."
+				},
+				"connectiontype": {
+					"$ref": "#/definitions/connection_type",
+					"description": "Network connection type."
+				},
+				"ifa": {
+					"type": "string",
+					"description": "ID sanctioned for advertiser use in the clear (i.e., not hashed)."
+				},
+				"didsha1": {
+					"type": "string",
+					"description": "Hardware device ID (e.g., IMEI); hashed via SHA1."
+				},
+				"didmd5": {
+					"type": "string",
+					"description": "Hardware device ID (e.g., IMEI); hashed via MD5."
+				},
+				"dpidsha1": {
+					"type": "string",
+					"description": "Platform device ID (e.g., Android ID); hashed via SHA1."
+				},
+				"dpidmd5": {
+					"type": "string",
+					"description": "Platform device ID (e.g., Android ID); hashed via MD5."
+				},
+				"macsha1": {
+					"type": "string",
+					"description": "MAC address of the device; hashed via SHA1."
+				},
+				"macmd5": {
+					"type": "string",
+					"description": "MAC addressof the device; hashed via MD5."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"geo": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"lat": {
+					"type": "number",
+					"minimum": -90,
+					"maximum": 90,
+					"description": "Latitude from -90.0 to +90.0, where negative is south."
+				},
+				"lon": {
+					"type": "number",
+					"minimum": -180,
+					"maximum": 180,
+					"description": "Longitude from -180.0 to +180.0, where negative is west."
+				},
+				"type": {
+					"$ref": "#/definitions/location_type",
+					"description": "Source of location data; recommended when passing lat/lon."
+				},
+				"accuracy": {
+					"type": "integer",
+					"description": "Estimated location accuracy in meters; recommended when lat/lonare specified and derived from a device’s location services (i.e., type = 1). Note that this is the accuracy as reported from the device. Consult OS specific documentation (e.g., Android, iOS) for exact interpretation."
+				},
+				"lastfix": {
+					"$ref": "#/definitions/positive_int",
+					"description": "Number of seconds since this geolocation fix was established. Note that devices may cache location data across multiple fetches. Ideally, this value should be from the time the actual fix was taken."
+				},
+				"ipservice": {
+					"$ref": "#/definitions/ip_location_services",
+					"description": "Service or provider used to determine geolocation from IP address if applicable (i.e., type = 2)."
+				},
+				"country": {
+					"type": "string",
+					"minLength": 3,
+					"maxLength": 3,
+					"description": "Country code using ISO-3166-1-alpha-3."
+				},
+				"region": {
+					"type": "string",
+					"description": "Region code using ISO-3166-2; 2-letter state code if USA."
+				},
+				"regionfips104": {
+					"type": "string",
+					"description": "Region of a country using FIPS 10-4 notation. While OpenRTB supports this attribute, it has been withdrawn by NIST in 2008."
+				},
+				"metro": {
+					"type": "string",
+					"description": "Google metro code; similar to but not exactly Nielsen DMAs. See Appendix A for a link to the codes."
+				},
+				"city": {
+					"type": "string",
+					"description": "City using United Nations Code for Trade & Transport Locations. See Appendix A for a link to the codes."
+				},
+				"zip": {
+					"type": "string",
+					"description": "Zip or postal code."
+				},
+				"utcoffset": {
+					"type": "integer",
+					"description": "Local time as the number +/- of minutes from UTC."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"user": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Exchange-specific ID for the user. At least one of “id” or “buyeruid” is recommended."
+				},
+				"buyeruid": {
+					"type": "string",
+					"description": "Buyer-specific ID for the user as mapped by the exchange for the buyer. At least “buyeruid” or “id” is recommended."
+				},
+				"yob": {
+					"type": "integer",
+					"minimum": 1000,
+					"maximum": 9999,
+					"description": "Year of birth as a 4-digit integer."
+				},
+				"gender": {
+					"type": "string",
+					"enum": [
+						"M",
+						"F",
+						"O"
+					],
+					"description": "Gender, where “M” = male, “F” = female, “O” = known to be other (i.e., omitted is unknown)."
+				},
+				"keywords": {
+					"type": "string",
+					"description": "Comma separated list of keywords, interests or intent."
+				},
+				"customdata": {
+					"type": "string",
+					"description": "Optional feature to pass bidder data that was set in the exchange’s cookie. The string must be in base85 cookie safe characters and be in any format. Proper JSON encoding must be used to include “escaped” quotation marks."
+				},
+				"geo": {
+					"$ref": "#/definitions/geo",
+					"description": "Location of the user’s home basedefined by a “Geo” object. This is not necessarily their current location."
+				},
+				"data": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/data"
+					},
+					"description": "Additional user data. Each “Data” object represents a different data source."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"data": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "Exchange-specific ID for the data provider."
+				},
+				"name": {
+					"type": "string",
+					"description": "Exchange-specific name for the data provider."
+				},
+				"segment": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/segment"
+					},
+					"description": "Array of “Segment” objects that contain the actual data values."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"segment": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "ID of the data segment specific to the data provider."
+				},
+				"name": {
+					"type": "string",
+					"description": "Name of the data segment specific to the data provider."
+				},
+				"value": {
+					"type": "string",
+					"description": "String representation of the data segment value."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"source": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"fd": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Entity responsible for the final impression sale decision, where 0 = exchange, 1 = upstream source."
+				},
+				"tid": {
+					"type": "string",
+					"description": "Transaction ID that must be common across all participants in this bid request (e.g., potentially multiple exchanges)."
+				},
+				"pchain": {
+					"type": "string",
+					"description": "Payment ID chain string containing embedded syntax described in the TAG Payment ID Protocol v1.0."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"regs": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"coppa": {
+					"$ref": "#/definitions/boolean_int",
+					"description": "Flag indicating if this request is subject to the COPPA regulations established by the USA FTC, where 0 = no, 1 = yes. Refer to Section 7.5 for more information."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"pmp": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"private_auction": {
+					"$ref": "#/definitions/boolean_int",
+					"default": 0,
+					"description": "Indicator of auction eligibility to seats named in the Direct Deals object, where 0 = all bids are accepted, 1 = bids arerestricted to the deals specified and the terms thereof."
+				},
+				"deals": {
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/deal"
+					},
+					"description": "Array of “Deal” objects that convey the specific deals applicable to this impression."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"deal": {
+			"type": "object",
+			"required": [
+				"id"
+			],
+			"additionalProperties": false,
+			"properties": {
+				"id": {
+					"type": "string",
+					"description": "A unique identifier for the direct deal."
+				},
+				"bidfloor": {
+					"type": "number",
+					"minimum": 0,
+					"description": "Minimum bidfor this impression expressed in CPM."
+				},
+				"bidfloorcur": {
+					"$ref": "#/definitions/currency",
+					"description": "Currency specified using ISO-4217 alpha codes. This may be different from bid currency returned by bidder if this is allowed by the exchange."
+				},
+				"at": {
+					"type": "integer",
+					"description": "Optional override of the overall auction type of the bid request, where 1 = First Price, 2 = Second Price Plus, 3 = the value passed in “bidfloor” is the agreed upon deal price. Additional auction types can be defined by the exchange."
+				},
+				"wseat": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Whitelist of buyer seats (e.g., advertisers, agencies) allowed to bid on this deal. IDs of seats and the buyer’s customers to which they refer must be coordinated between bidders and the exchange a priori. Omission implies no seat restrictions."
+				},
+				"wadomain": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"description": "Array of advertiser domains (e.g., advertiser.com) allowed to bid on this deal. Omission implies no advertiser restrictions."
+				},
+				"ext": {
+					"type": "object",
+					"description": "Placeholder for exchange-specific extensions to OpenRTB."
+				}
+			}
+		},
+		"content_category": {
+			"type": "string",
+			"enum": [
+				"IAB1",
+				"IAB1-1",
+				"IAB1-2",
+				"IAB1-3",
+				"IAB1-4",
+				"IAB1-5",
+				"IAB1-6",
+				"IAB1-7",
+				"IAB2",
+				"IAB2-1",
+				"IAB2-2",
+				"IAB2-3",
+				"IAB2-4",
+				"IAB2-5",
+				"IAB2-6",
+				"IAB2-7",
+				"IAB2-8",
+				"IAB2-9",
+				"IAB2-10",
+				"IAB2-11",
+				"IAB2-12",
+				"IAB2-13",
+				"IAB2-14",
+				"IAB2-15",
+				"IAB2-16",
+				"IAB2-17",
+				"IAB2-18",
+				"IAB2-19",
+				"IAB2-20",
+				"IAB2-21",
+				"IAB2-22",
+				"IAB2-23",
+				"IAB3",
+				"IAB3-1",
+				"IAB3-2",
+				"IAB3-3",
+				"IAB3-4",
+				"IAB3-5",
+				"IAB3-6",
+				"IAB3-7",
+				"IAB3-8",
+				"IAB3-9",
+				"IAB3-10",
+				"IAB3-11",
+				"IAB3-12",
+				"IAB4",
+				"IAB4-1",
+				"IAB4-2",
+				"IAB4-3",
+				"IAB4-4",
+				"IAB4-5",
+				"IAB4-6",
+				"IAB4-7",
+				"IAB4-8",
+				"IAB4-9",
+				"IAB4-10",
+				"IAB4-11",
+				"IAB5",
+				"IAB5-1",
+				"IAB5-2",
+				"IAB5-3",
+				"IAB5-4",
+				"IAB5-5",
+				"IAB5-6",
+				"IAB5-7",
+				"IAB5-8",
+				"IAB5-9",
+				"IAB5-10",
+				"IAB5-11",
+				"IAB5-12",
+				"IAB5-13",
+				"IAB5-14",
+				"IAB5-15",
+				"IAB6",
+				"IAB6-1",
+				"IAB6-2",
+				"IAB6-3",
+				"IAB6-4",
+				"IAB6-5",
+				"IAB6-6",
+				"IAB6-7",
+				"IAB6-8",
+				"IAB6-9",
+				"IAB7",
+				"IAB7-1",
+				"IAB7-2",
+				"IAB7-3",
+				"IAB7-4",
+				"IAB7-5",
+				"IAB7-6",
+				"IAB7-7",
+				"IAB7-8",
+				"IAB7-9",
+				"IAB7-10",
+				"IAB7-11",
+				"IAB7-12",
+				"IAB7-13",
+				"IAB7-14",
+				"IAB7-15",
+				"IAB7-16",
+				"IAB7-17",
+				"IAB7-18",
+				"IAB7-19",
+				"IAB7-20",
+				"IAB7-21",
+				"IAB7-22",
+				"IAB7-23",
+				"IAB7-24",
+				"IAB7-25",
+				"IAB7-26",
+				"IAB7-27",
+				"IAB7-28",
+				"IAB7-29",
+				"IAB7-30",
+				"IAB7-31",
+				"IAB7-32",
+				"IAB7-33",
+				"IAB7-34",
+				"IAB7-35",
+				"IAB7-36",
+				"IAB7-37",
+				"IAB7-38",
+				"IAB7-39",
+				"IAB7-40",
+				"IAB7-41",
+				"IAB7-42",
+				"IAB7-43",
+				"IAB7-44",
+				"IAB7-45",
+				"IAB8",
+				"IAB8-1",
+				"IAB8-2",
+				"IAB8-3",
+				"IAB8-4",
+				"IAB8-5",
+				"IAB8-6",
+				"IAB8-7",
+				"IAB8-8",
+				"IAB8-9",
+				"IAB8-10",
+				"IAB8-11",
+				"IAB8-12",
+				"IAB8-13",
+				"IAB8-14",
+				"IAB8-15",
+				"IAB8-16",
+				"IAB8-17",
+				"IAB8-18",
+				"IAB9",
+				"IAB9-1",
+				"IAB9-2",
+				"IAB9-3",
+				"IAB9-4",
+				"IAB9-5",
+				"IAB9-6",
+				"IAB9-7",
+				"IAB9-8",
+				"IAB9-9",
+				"IAB9-10",
+				"IAB9-11",
+				"IAB9-12",
+				"IAB9-13",
+				"IAB9-14",
+				"IAB9-15",
+				"IAB9-16",
+				"IAB9-17",
+				"IAB9-18",
+				"IAB9-19",
+				"IAB9-20",
+				"IAB9-21",
+				"IAB9-22",
+				"IAB9-23",
+				"IAB9-24",
+				"IAB9-25",
+				"IAB9-26",
+				"IAB9-27",
+				"IAB9-28",
+				"IAB9-29",
+				"IAB9-30",
+				"IAB9-31",
+				"IAB10",
+				"IAB10-1",
+				"IAB10-2",
+				"IAB10-3",
+				"IAB10-4",
+				"IAB10-5",
+				"IAB10-6",
+				"IAB10-7",
+				"IAB10-8",
+				"IAB10-9",
+				"IAB11",
+				"IAB11-1",
+				"IAB11-2",
+				"IAB11-3",
+				"IAB11-4",
+				"IAB11-5",
+				"IAB12",
+				"IAB12-1",
+				"IAB12-2",
+				"IAB12-3",
+				"IAB13",
+				"IAB13-1",
+				"IAB13-2",
+				"IAB13-3",
+				"IAB13-4",
+				"IAB13-5",
+				"IAB13-6",
+				"IAB13-7",
+				"IAB13-8",
+				"IAB13-9",
+				"IAB13-10",
+				"IAB13-11",
+				"IAB13-12",
+				"IAB14",
+				"IAB14-1",
+				"IAB14-2",
+				"IAB14-3",
+				"IAB14-4",
+				"IAB14-5",
+				"IAB14-6",
+				"IAB14-7",
+				"IAB14-8",
+				"IAB15",
+				"IAB15-1",
+				"IAB15-2",
+				"IAB15-3",
+				"IAB15-4",
+				"IAB15-5",
+				"IAB15-6",
+				"IAB15-7",
+				"IAB15-8",
+				"IAB15-9",
+				"IAB15-10",
+				"IAB16",
+				"IAB16-1",
+				"IAB16-2",
+				"IAB16-3",
+				"IAB16-4",
+				"IAB16-5",
+				"IAB16-6",
+				"IAB16-7",
+				"IAB17",
+				"IAB17-1",
+				"IAB17-2",
+				"IAB17-3",
+				"IAB17-4",
+				"IAB17-5",
+				"IAB17-6",
+				"IAB17-7",
+				"IAB17-8",
+				"IAB17-9",
+				"IAB17-10",
+				"IAB17-11",
+				"IAB17-12",
+				"IAB17-13",
+				"IAB17-14",
+				"IAB17-15",
+				"IAB17-16",
+				"IAB17-17",
+				"IAB17-18",
+				"IAB17-19",
+				"IAB17-20",
+				"IAB17-21",
+				"IAB17-22",
+				"IAB17-23",
+				"IAB17-24",
+				"IAB17-25",
+				"IAB17-26",
+				"IAB17-27",
+				"IAB17-28",
+				"IAB17-29",
+				"IAB17-30",
+				"IAB17-31",
+				"IAB17-32",
+				"IAB17-33",
+				"IAB17-34",
+				"IAB17-35",
+				"IAB17-36",
+				"IAB17-37",
+				"IAB17-38",
+				"IAB17-39",
+				"IAB17-40",
+				"IAB17-41",
+				"IAB17-42",
+				"IAB17-43",
+				"IAB17-44",
+				"IAB18",
+				"IAB18-1",
+				"IAB18-2",
+				"IAB18-3",
+				"IAB18-4",
+				"IAB18-5",
+				"IAB18-6",
+				"IAB19",
+				"IAB19-1",
+				"IAB19-2",
+				"IAB19-3",
+				"IAB19-4",
+				"IAB19-5",
+				"IAB19-6",
+				"IAB19-7",
+				"IAB19-8",
+				"IAB19-9",
+				"IAB19-10",
+				"IAB19-11",
+				"IAB19-12",
+				"IAB19-13",
+				"IAB19-14",
+				"IAB19-15",
+				"IAB19-16",
+				"IAB19-17",
+				"IAB19-18",
+				"IAB19-19",
+				"IAB19-20",
+				"IAB19-21",
+				"IAB19-22",
+				"IAB19-23",
+				"IAB19-24",
+				"IAB19-25",
+				"IAB19-26",
+				"IAB19-27",
+				"IAB19-28",
+				"IAB19-29",
+				"IAB19-30",
+				"IAB19-31",
+				"IAB19-32",
+				"IAB19-33",
+				"IAB19-34",
+				"IAB19-35",
+				"IAB19-36",
+				"IAB20",
+				"IAB20-1",
+				"IAB20-2",
+				"IAB20-3",
+				"IAB20-4",
+				"IAB20-5",
+				"IAB20-6",
+				"IAB20-7",
+				"IAB20-8",
+				"IAB20-9",
+				"IAB20-10",
+				"IAB20-11",
+				"IAB20-12",
+				"IAB20-13",
+				"IAB20-14",
+				"IAB20-15",
+				"IAB20-16",
+				"IAB20-17",
+				"IAB20-18",
+				"IAB20-19",
+				"IAB20-20",
+				"IAB20-21",
+				"IAB20-22",
+				"IAB20-23",
+				"IAB20-24",
+				"IAB20-25",
+				"IAB20-26",
+				"IAB20-27",
+				"IAB21",
+				"IAB21-1",
+				"IAB21-2",
+				"IAB21-3",
+				"IAB22",
+				"IAB22-1",
+				"IAB22-2",
+				"IAB22-3",
+				"IAB22-4",
+				"IAB23",
+				"IAB23-1",
+				"IAB23-2",
+				"IAB23-3",
+				"IAB23-4",
+				"IAB23-5",
+				"IAB23-6",
+				"IAB23-7",
+				"IAB23-8",
+				"IAB23-9",
+				"IAB23-10",
+				"IAB24",
+				"IAB25",
+				"IAB25-1",
+				"IAB25-2",
+				"IAB25-3",
+				"IAB25-4",
+				"IAB25-5",
+				"IAB25-6",
+				"IAB25-7",
+				"IAB26",
+				"IAB26-1",
+				"IAB26-2",
+				"IAB26-3",
+				"IAB26-4"
+			],
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>IAB1</td><td>Arts & Entertainment</td></tr><tr><td>IAB1-1</td><td>Books & Literature</td></tr><tr><td>IAB1-2</td><td>Celebrity Fan/Gossip</td></tr><tr><td>IAB1-3</td><td>Fine Art</td></tr><tr><td>IAB1-4</td><td>Humor</td></tr><tr><td>IAB1-5</td><td>Movies</td></tr><tr><td>IAB1-6</td><td>Music</td></tr><tr><td>IAB1-7</td><td>Television</td></tr><tr><td>IAB2</td><td>Automotive</td></tr><tr><td>IAB2-1</td><td>Auto Parts</td></tr><tr><td>IAB2-2</td><td>Auto Repair</td></tr><tr><td>IAB2-3</td><td>Buying/Selling Cars</td></tr><tr><td>IAB2-4</td><td>Car Culture</td></tr><tr><td>IAB2-5</td><td>Certified Pre-Owned</td></tr><tr><td>IAB2-6</td><td>Convertible</td></tr><tr><td>IAB2-7</td><td>Coupe</td></tr><tr><td>IAB2-8</td><td>Crossover</td></tr><tr><td>IAB2-9</td><td>Diesel</td></tr><tr><td>IAB2-10</td><td>Electric Vehicle</td></tr><tr><td>IAB2-11</td><td>Hatchback</td></tr><tr><td>IAB2-12</td><td>Hybrid</td></tr><tr><td>IAB2-13</td><td>Luxury</td></tr><tr><td>IAB2-14</td><td>Minivan</td></tr><tr><td>IAB2-15</td><td>Motorcycles</td></tr><tr><td>IAB2-16</td><td>Off-Road Vehicles</td></tr><tr><td>IAB2-17</td><td>Performance Vehicles</td></tr><tr><td>IAB2-18</td><td>Pickup</td></tr><tr><td>IAB2-19</td><td>Road-Side Assistance</td></tr><tr><td>IAB2-20</td><td>Sedan</td></tr><tr><td>IAB2-21</td><td>Trucks & Accessories</td></tr><tr><td>IAB2-22</td><td>Vintage Cars</td></tr><tr><td>IAB2-23</td><td>Wagon</td></tr><tr><td>IAB3</td><td>Business</td></tr><tr><td>IAB3-1</td><td>Advertising</td></tr><tr><td>IAB3-2</td><td>Agriculture</td></tr><tr><td>IAB3-3</td><td>Biotech/Biomedical</td></tr><tr><td>IAB3-4</td><td>Business Software</td></tr><tr><td>IAB3-5</td><td>Construction</td></tr><tr><td>IAB3-6</td><td>Forestry</td></tr><tr><td>IAB3-7</td><td>Government</td></tr><tr><td>IAB3-8</td><td>Green Solutions</td></tr><tr><td>IAB3-9</td><td>Human Resources</td></tr><tr><td>IAB3-10</td><td>Logistics</td></tr><tr><td>IAB3-11</td><td>Marketing</td></tr><tr><td>IAB3-12</td><td>Metals</td></tr><tr><td>IAB4</td><td>Careers</td></tr><tr><td>IAB4-1</td><td>Career Planning</td></tr><tr><td>IAB4-2</td><td>College</td></tr><tr><td>IAB4-3</td><td>Financial Aid</td></tr><tr><td>IAB4-4</td><td>Job Fairs</td></tr><tr><td>IAB4-5</td><td>Job Search</td></tr><tr><td>IAB4-6</td><td>Resume Writing/Advice</td></tr><tr><td>IAB4-7</td><td>Nursing</td></tr><tr><td>IAB4-8</td><td>Scholarships</td></tr><tr><td>IAB4-9</td><td>Telecommuting</td></tr><tr><td>IAB4-10</td><td>U.S. Military</td></tr><tr><td>IAB4-11</td><td>Career Advice</td></tr><tr><td>IAB5</td><td>Education</td></tr><tr><td>IAB5-1</td><td>7-12 Education</td></tr><tr><td>IAB5-2</td><td>Adult Education</td></tr><tr><td>IAB5-3</td><td>Art History</td></tr><tr><td>IAB5-4</td><td>College Administration</td></tr><tr><td>IAB5-5</td><td>College Life</td></tr><tr><td>IAB5-6</td><td>Distance Learning</td></tr><tr><td>IAB5-7</td><td>English as a 2nd Language</td></tr><tr><td>IAB5-8</td><td>Language Learning</td></tr><tr><td>IAB5-9</td><td>Graduate School</td></tr><tr><td>IAB5-10</td><td>Homeschooling</td></tr><tr><td>IAB5-11</td><td>Homework/Study Tips</td></tr><tr><td>IAB5-12</td><td>K-6 Educators</td></tr><tr><td>IAB5-13</td><td>Private School</td></tr><tr><td>IAB5-14</td><td>Special Education</td></tr><tr><td>IAB5-15</td><td>Studying Business</td></tr><tr><td>IAB6</td><td>Family & Parenting</td></tr><tr><td>IAB6-1</td><td>Adoption</td></tr><tr><td>IAB6-2</td><td>Babies & Toddlers</td></tr><tr><td>IAB6-3</td><td>Daycare/Pre School</td></tr><tr><td>IAB6-4</td><td>Family Internet</td></tr><tr><td>IAB6-5</td><td>Parenting - K-6 Kids</td></tr><tr><td>IAB6-6</td><td>Parenting teens</td></tr><tr><td>IAB6-7</td><td>Pregnancy</td></tr><tr><td>IAB6-8</td><td>Special Needs Kids</td></tr><tr><td>IAB6-9</td><td>Eldercare</td></tr><tr><td>IAB7</td><td>Health & Fitness</td></tr><tr><td>IAB7-1</td><td>Exercise</td></tr><tr><td>IAB7-2</td><td>ADD</td></tr><tr><td>IAB7-3</td><td>AIDS/HIV</td></tr><tr><td>IAB7-4</td><td>Allergies</td></tr><tr><td>IAB7-5</td><td>Alternative Medicine</td></tr><tr><td>IAB7-6</td><td>Arthritis</td></tr><tr><td>IAB7-7</td><td>Asthma</td></tr><tr><td>IAB7-8</td><td>Autism/PDD</td></tr><tr><td>IAB7-9</td><td>Bipolar Disorder</td></tr><tr><td>IAB7-10</td><td>Brain Tumor</td></tr><tr><td>IAB7-11</td><td>Cancer</td></tr><tr><td>IAB7-12</td><td>Cholesterol</td></tr><tr><td>IAB7-13</td><td>Chronic Fatigue Syndrome</td></tr><tr><td>IAB7-14</td><td>Chronic Pain</td></tr><tr><td>IAB7-15</td><td>Cold & Flu</td></tr><tr><td>IAB7-16</td><td>Deafness</td></tr><tr><td>IAB7-17</td><td>Dental Care</td></tr><tr><td>IAB7-18</td><td>Depression</td></tr><tr><td>IAB7-19</td><td>Dermatology</td></tr><tr><td>IAB7-20</td><td>Diabetes</td></tr><tr><td>IAB7-21</td><td>Epilepsy</td></tr><tr><td>IAB7-22</td><td>GERD/Acid Reflux</td></tr><tr><td>IAB7-23</td><td>Headaches/Migraines</td></tr><tr><td>IAB7-24</td><td>Heart Disease</td></tr><tr><td>IAB7-25</td><td>Herbs for Health</td></tr><tr><td>IAB7-26</td><td>Holistic Healing</td></tr><tr><td>IAB7-27</td><td>IBS/Crohn’s Disease</td></tr><tr><td>IAB7-28</td><td>Incest/Abuse Support</td></tr><tr><td>IAB7-29</td><td>Incontinence</td></tr><tr><td>IAB7-30</td><td>Infertility</td></tr><tr><td>IAB7-31</td><td>Men’s Health</td></tr><tr><td>IAB7-32</td><td>Nutrition</td></tr><tr><td>IAB7-33</td><td>Orthopedics</td></tr><tr><td>IAB7-34</td><td>Panic/Anxiety Disorders</td></tr><tr><td>IAB7-35</td><td>Pediatrics</td></tr><tr><td>IAB7-36</td><td>Physical Therapy</td></tr><tr><td>IAB7-37</td><td>Psychology/Psychiatry</td></tr><tr><td>IAB7-38</td><td>Senior Health</td></tr><tr><td>IAB7-39</td><td>Sexuality</td></tr><tr><td>IAB7-40</td><td>Sleep Disorders</td></tr><tr><td>IAB7-41</td><td>Smoking Cessation</td></tr><tr><td>IAB7-42</td><td>Substance Abuse</td></tr><tr><td>IAB7-43</td><td>Thyroid Disease</td></tr><tr><td>IAB7-44</td><td>Weight Loss</td></tr><tr><td>IAB7-45</td><td>Women's Health</td></tr><tr><td>IAB8</td><td>Food & Drink</td></tr><tr><td>IAB8-1</td><td>American Cuisine</td></tr><tr><td>IAB8-2</td><td>Barbecues & Grilling</td></tr><tr><td>IAB8-3</td><td>Cajun/Creole</td></tr><tr><td>IAB8-4</td><td>Chinese Cuisine</td></tr><tr><td>IAB8-5</td><td>Cocktails/Beer</td></tr><tr><td>IAB8-6</td><td>Coffee/Tea</td></tr><tr><td>IAB8-7</td><td>Cuisine-Specific</td></tr><tr><td>IAB8-8</td><td>Desserts & Baking</td></tr><tr><td>IAB8-9</td><td>Dining Out</td></tr><tr><td>IAB8-10</td><td>Food Allergies</td></tr><tr><td>IAB8-11</td><td>French Cuisine</td></tr><tr><td>IAB8-12</td><td>Health/Low-Fat Cooking</td></tr><tr><td>IAB8-13</td><td>Italian Cuisine</td></tr><tr><td>IAB8-14</td><td>Japanese Cuisine</td></tr><tr><td>IAB8-15</td><td>Mexican Cuisine</td></tr><tr><td>IAB8-16</td><td>Vegan</td></tr><tr><td>IAB8-17</td><td>Vegetarian</td></tr><tr><td>IAB8-18</td><td>Wine</td></tr><tr><td>IAB9</td><td>Hobbies & Interests</td></tr><tr><td>IAB9-1</td><td>Art/Technology</td></tr><tr><td>IAB9-2</td><td>Arts & Crafts</td></tr><tr><td>IAB9-3</td><td>Beadwork</td></tr><tr><td>IAB9-4</td><td>Bird-Watching</td></tr><tr><td>IAB9-5</td><td>Board Games/Puzzles</td></tr><tr><td>IAB9-6</td><td>Candle & Soap Making</td></tr><tr><td>IAB9-7</td><td>Card Games</td></tr><tr><td>IAB9-8</td><td>Chess</td></tr><tr><td>IAB9-9</td><td>Cigars</td></tr><tr><td>IAB9-10</td><td>Collecting</td></tr><tr><td>IAB9-11</td><td>Comic Books</td></tr><tr><td>IAB9-12</td><td>Drawing/Sketching</td></tr><tr><td>IAB9-13</td><td>Freelance Writing</td></tr><tr><td>IAB9-14</td><td>Genealogy</td></tr><tr><td>IAB9-15</td><td>Getting Published</td></tr><tr><td>IAB9-16</td><td>Guitar</td></tr><tr><td>IAB9-17</td><td>Home Recording</td></tr><tr><td>IAB9-18</td><td>Investors & Patents</td></tr><tr><td>IAB9-19</td><td>Jewelry Making</td></tr><tr><td>IAB9-20</td><td>Magic & Illusion</td></tr><tr><td>IAB9-21</td><td>Needlework</td></tr><tr><td>IAB9-22</td><td>Painting</td></tr><tr><td>IAB9-23</td><td>Photography</td></tr><tr><td>IAB9-24</td><td>Radio</td></tr><tr><td>IAB9-25</td><td>Roleplaying Games</td></tr><tr><td>IAB9-26</td><td>Sci-Fi & Fantasy</td></tr><tr><td>IAB9-27</td><td>Scrapbooking</td></tr><tr><td>IAB9-28</td><td>Screenwriting</td></tr><tr><td>IAB9-29</td><td>Stamps & Coins</td></tr><tr><td>IAB9-30</td><td>Video & Computer Games</td></tr><tr><td>IAB9-31</td><td>Woodworking</td></tr><tr><td>IAB10</td><td>Home & Garden</td></tr><tr><td>IAB10-1</td><td>Appliances</td></tr><tr><td>IAB10-2</td><td>Entertaining</td></tr><tr><td>IAB10-3</td><td>Environmental Safety</td></tr><tr><td>IAB10-4</td><td>Gardening</td></tr><tr><td>IAB10-5</td><td>Home Repair</td></tr><tr><td>IAB10-6</td><td>Home Theater</td></tr><tr><td>IAB10-7</td><td>Interior Decorating</td></tr><tr><td>IAB10-8</td><td>Landscaping</td></tr><tr><td>IAB10-9</td><td>Remodeling & Construction</td></tr><tr><td>IAB11</td><td>Law, Government,& Politics</td></tr><tr><td>IAB11-1</td><td>Immigration</td></tr><tr><td>IAB11-2</td><td>Legal Issues</td></tr><tr><td>IAB11-3</td><td>U.S. Government Resources</td></tr><tr><td>IAB11-4</td><td>Politics</td></tr><tr><td>IAB11-5</td><td>Commentary</td></tr><tr><td>IAB12</td><td>News</td></tr><tr><td>IAB12-1</td><td>International News</td></tr><tr><td>IAB12-2</td><td>National News</td></tr><tr><td>IAB12-3</td><td>Local News</td></tr><tr><td>IAB13</td><td>Personal Finance</td></tr><tr><td>IAB13-1</td><td>Beginning Investing</td></tr><tr><td>IAB13-2</td><td>Credit/Debt & Loans</td></tr><tr><td>IAB13-3</td><td>Financial News</td></tr><tr><td>IAB13-4</td><td>Financial Planning</td></tr><tr><td>IAB13-5</td><td>Hedge Fund</td></tr><tr><td>IAB13-6</td><td>Insurance</td></tr><tr><td>IAB13-7</td><td>Investing</td></tr><tr><td>IAB13-8</td><td>Mutual Funds</td></tr><tr><td>IAB13-9</td><td>Options</td></tr><tr><td>IAB13-10</td><td>Retirement Planning</td></tr><tr><td>IAB13-11</td><td>Stocks</td></tr><tr><td>IAB13-12</td><td>Tax Planning</td></tr><tr><td>IAB14</td><td>Society</td></tr><tr><td>IAB14-1</td><td>Dating</td></tr><tr><td>IAB14-2</td><td>Divorce Support</td></tr><tr><td>IAB14-3</td><td>Gay Life</td></tr><tr><td>IAB14-4</td><td>Marriage</td></tr><tr><td>IAB14-5</td><td>Senior Living</td></tr><tr><td>IAB14-6</td><td>Teens</td></tr><tr><td>IAB14-7</td><td>Weddings</td></tr><tr><td>IAB14-8</td><td>Ethnic Specific</td></tr><tr><td>IAB15</td><td>Science</td></tr><tr><td>IAB15-1</td><td>Astrology</td></tr><tr><td>IAB15-2</td><td>Biology</td></tr><tr><td>IAB15-3</td><td>Chemistry</td></tr><tr><td>IAB15-4</td><td>Geology</td></tr><tr><td>IAB15-5</td><td>Paranormal Phenomena</td></tr><tr><td>IAB15-6</td><td>Physics</td></tr><tr><td>IAB15-7</td><td>Space/Astronomy</td></tr><tr><td>IAB15-8</td><td>Geography</td></tr><tr><td>IAB15-9</td><td>Botany</td></tr><tr><td>IAB15-10</td><td>Weather</td></tr><tr><td>IAB16</td><td>Pets</td></tr><tr><td>IAB16-1</td><td>Aquariums</td></tr><tr><td>IAB16-2</td><td>Birds</td></tr><tr><td>IAB16-3</td><td>Cats</td></tr><tr><td>IAB16-4</td><td>Dogs</td></tr><tr><td>IAB16-5</td><td>Large Animals</td></tr><tr><td>IAB16-6</td><td>Reptiles</td></tr><tr><td>IAB16-7</td><td>Veterinary Medicine</td></tr><tr><td>IAB17</td><td>Sports</td></tr><tr><td>IAB17-1</td><td>Auto Racing</td></tr><tr><td>IAB17-2</td><td>Baseball</td></tr><tr><td>IAB17-3</td><td>Bicycling</td></tr><tr><td>IAB17-4</td><td>Bodybuilding</td></tr><tr><td>IAB17-5</td><td>Boxing</td></tr><tr><td>IAB17-6</td><td>Canoeing/Kayaking</td></tr><tr><td>IAB17-7</td><td>Cheerleading</td></tr><tr><td>IAB17-8</td><td>Climbing</td></tr><tr><td>IAB17-9</td><td>Cricket</td></tr><tr><td>IAB17-10</td><td>Figure Skating</td></tr><tr><td>IAB17-11</td><td>Fly Fishing</td></tr><tr><td>IAB17-12</td><td>Football</td></tr><tr><td>IAB17-13</td><td>Freshwater Fishing</td></tr><tr><td>IAB17-14</td><td>Game & Fish</td></tr><tr><td>IAB17-15</td><td>Golf</td></tr><tr><td>IAB17-16</td><td>Horse Racing</td></tr><tr><td>IAB17-17</td><td>Horses</td></tr><tr><td>IAB17-18</td><td>Hunting/Shooting</td></tr><tr><td>IAB17-19</td><td>Inline Skating</td></tr><tr><td>IAB17-20</td><td>Martial Arts</td></tr><tr><td>IAB17-21</td><td>Mountain Biking</td></tr><tr><td>IAB17-22</td><td>NASCAR Racing</td></tr><tr><td>IAB17-23</td><td>Olympics</td></tr><tr><td>IAB17-24</td><td>Paintball</td></tr><tr><td>IAB17-25</td><td>Power & Motorcycles</td></tr><tr><td>IAB17-26</td><td>Pro Basketball</td></tr><tr><td>IAB17-27</td><td>Pro Ice Hockey</td></tr><tr><td>IAB17-28</td><td>Rodeo</td></tr><tr><td>IAB17-29</td><td>Rugby</td></tr><tr><td>IAB17-30</td><td>Running/Jogging</td></tr><tr><td>IAB17-31</td><td>Sailing</td></tr><tr><td>IAB17-32</td><td>Saltwater Fishing</td></tr><tr><td>IAB17-33</td><td>Scuba Diving</td></tr><tr><td>IAB17-34</td><td>Skateboarding</td></tr><tr><td>IAB17-35</td><td>Skiing</td></tr><tr><td>IAB17-36</td><td>Snowboarding</td></tr><tr><td>IAB17-37</td><td>Surfing/Body-Boarding</td></tr><tr><td>IAB17-38</td><td>Swimming</td></tr><tr><td>IAB17-39</td><td>Table Tennis/Ping-Pong</td></tr><tr><td>IAB17-40</td><td>Tennis</td></tr><tr><td>IAB17-41</td><td>Volleyball</td></tr><tr><td>IAB17-42</td><td>Walking</td></tr><tr><td>IAB17-43</td><td>Waterski/Wakeboard</td></tr><tr><td>IAB17-44</td><td>World Soccer</td></tr><tr><td>IAB18</td><td>Style & Fashion</td></tr><tr><td>IAB18-1</td><td>Beauty</td></tr><tr><td>IAB18-2</td><td>Body Art</td></tr><tr><td>IAB18-3</td><td>Fashion</td></tr><tr><td>IAB18-4</td><td>Jewelry</td></tr><tr><td>IAB18-5</td><td>Clothing</td></tr><tr><td>IAB18-6</td><td>Accessories</td></tr><tr><td>IAB19</td><td>Technology & Computing</td></tr><tr><td>IAB19-1</td><td>3-D Graphics</td></tr><tr><td>IAB19-2</td><td>Animation</td></tr><tr><td>IAB19-3</td><td>Antivirus Software</td></tr><tr><td>IAB19-4</td><td>C/C++</td></tr><tr><td>IAB19-5</td><td>Cameras & Camcorders</td></tr><tr><td>IAB19-6</td><td>Cell Phones</td></tr><tr><td>IAB19-7</td><td>Computer Certification</td></tr><tr><td>IAB19-8</td><td>Computer Networking</td></tr><tr><td>IAB19-9</td><td>Computer Peripherals</td></tr><tr><td>IAB19-10</td><td>Computer Reviews</td></tr><tr><td>IAB19-11</td><td>Data Centers</td></tr><tr><td>IAB19-12</td><td>Databases</td></tr><tr><td>IAB19-13</td><td>Desktop Publishing</td></tr><tr><td>IAB19-14</td><td>Desktop Video</td></tr><tr><td>IAB19-15</td><td>Email</td></tr><tr><td>IAB19-16</td><td>Graphics Software</td></tr><tr><td>IAB19-17</td><td>Home Video/DVD</td></tr><tr><td>IAB19-18</td><td>Internet Technology</td></tr><tr><td>IAB19-19</td><td>Java</td></tr><tr><td>IAB19-20</td><td>JavaScript</td></tr><tr><td>IAB19-21</td><td>Mac Support</td></tr><tr><td>IAB19-22</td><td>MP3/MIDI</td></tr><tr><td>IAB19-23</td><td>Net Conferencing</td></tr><tr><td>IAB19-24</td><td>Net for Beginners</td></tr><tr><td>IAB19-25</td><td>Network Security</td></tr><tr><td>IAB19-26</td><td>Palmtops/PDAs</td></tr><tr><td>IAB19-27</td><td>PC Support</td></tr><tr><td>IAB19-28</td><td>Portable</td></tr><tr><td>IAB19-29</td><td>Entertainment</td></tr><tr><td>IAB19-30</td><td>Shareware/Freeware</td></tr><tr><td>IAB19-31</td><td>Unix</td></tr><tr><td>IAB19-32</td><td>Visual Basic</td></tr><tr><td>IAB19-33</td><td>Web Clip Art</td></tr><tr><td>IAB19-34</td><td>Web Design/HTML</td></tr><tr><td>IAB19-35</td><td>Web Search</td></tr><tr><td>IAB19-36</td><td>Windows</td></tr><tr><td>IAB20</td><td>Travel</td></tr><tr><td>IAB20-1</td><td>Adventure Travel</td></tr><tr><td>IAB20-2</td><td>Africa</td></tr><tr><td>IAB20-3</td><td>Air Travel</td></tr><tr><td>IAB20-4</td><td>Australia & New Zealand</td></tr><tr><td>IAB20-5</td><td>Bed & Breakfasts</td></tr><tr><td>IAB20-6</td><td>Budget Travel</td></tr><tr><td>IAB20-7</td><td>Business Travel</td></tr><tr><td>IAB20-8</td><td>By US Locale</td></tr><tr><td>IAB20-9</td><td>Camping</td></tr><tr><td>IAB20-10</td><td>Canada</td></tr><tr><td>IAB20-11</td><td>Caribbean</td></tr><tr><td>IAB20-12</td><td>Cruises</td></tr><tr><td>IAB20-13</td><td>Eastern Europe</td></tr><tr><td>IAB20-14</td><td>Europe</td></tr><tr><td>IAB20-15</td><td>France</td></tr><tr><td>IAB20-16</td><td>Greece</td></tr><tr><td>IAB20-17</td><td>Honeymoons/Getaways</td></tr><tr><td>IAB20-18</td><td>Hotels</td></tr><tr><td>IAB20-19</td><td>Italy</td></tr><tr><td>IAB20-20</td><td>Japan</td></tr><tr><td>IAB20-21</td><td>Mexico & Central America</td></tr><tr><td>IAB20-22</td><td>National Parks</td></tr><tr><td>IAB20-23</td><td>South America</td></tr><tr><td>IAB20-24</td><td>Spas</td></tr><tr><td>IAB20-25</td><td>Theme Parks</td></tr><tr><td>IAB20-26</td><td>Traveling with Kids</td></tr><tr><td>IAB20-27</td><td>United Kingdom</td></tr><tr><td>IAB21</td><td>Real Estate</td></tr><tr><td>IAB21-1</td><td>Apartments</td></tr><tr><td>IAB21-2</td><td>Architects</td></tr><tr><td>IAB21-3</td><td>Buying/Selling Homes</td></tr><tr><td>IAB22</td><td>Shopping</td></tr><tr><td>IAB22-1</td><td>Contests & Freebies</td></tr><tr><td>IAB22-2</td><td>Couponing</td></tr><tr><td>IAB22-3</td><td>Comparison</td></tr><tr><td>IAB22-4</td><td>Engines</td></tr><tr><td>IAB23</td><td>Religion & Spirituality</td></tr><tr><td>IAB23-1</td><td>Alternative Religions</td></tr><tr><td>IAB23-2</td><td>Atheism/Agnosticism</td></tr><tr><td>IAB23-3</td><td>Buddhism</td></tr><tr><td>IAB23-4</td><td>Catholicism</td></tr><tr><td>IAB23-5</td><td>Christianity</td></tr><tr><td>IAB23-6</td><td>Hinduism</td></tr><tr><td>IAB23-7</td><td>Islam</td></tr><tr><td>IAB23-8</td><td>Judaism</td></tr><tr><td>IAB23-9</td><td>Latter-Day Saints</td></tr><tr><td>IAB23-10</td><td>Pagan/Wiccan</td></tr><tr><td>IAB24</td><td>Uncategorized</td></tr><tr><td>IAB25</td><td>Non-Standard Content</td></tr><tr><td>IAB25-1</td><td>Unmoderated UGC</td></tr><tr><td>IAB25-2</td><td>Extreme Graphic/Explicit Violence</td></tr><tr><td>IAB25-3</td><td>Pornography</td></tr><tr><td>IAB25-4</td><td>Profane Content</td></tr><tr><td>IAB25-5</td><td>Hate Content</td></tr><tr><td>IAB25-6</td><td>Under Construction</td></tr><tr><td>IAB25-7</td><td>Incentivized</td></tr><tr><td>IAB26</td><td>Illegal Content</td></tr><tr><td>IAB26-1</td><td>Illegal Content</td></tr><tr><td>IAB26-2</td><td>Warez</td></tr><tr><td>IAB26-3</td><td>Spyware/Malware</td></tr><tr><td>IAB26-4</td><td>Copyright Infringement</td></tr></table>"
+		},
+		"banner_ad_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 4,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>XHTML Text Ad (usually mobile)</td></tr> <tr><td>2</td><td>XHTML Banner Ad (usually mobile)</td></tr> <tr><td>3</td><td>JavaScript Ad; must be valid XHTML (i.e., Script Tags Included)</td></tr> <tr><td>4</td><td>iframe</td></tr> </table>"
+		},
+		"creative_attribute": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 17,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Audio Ad (Auto-Play)</td></tr> <tr><td>2</td><td>Audio Ad (User Initiated)</td></tr> <tr><td>3</td><td>Expandable (Automatic)</td></tr> <tr><td>4</td><td>Expandable (User Initiated - Click)</td></tr> <tr><td>5</td><td>Expandable (User Initiated - Rollover)</td></tr> <tr><td>6</td><td>In-Banner Video Ad (Auto-Play)</td></tr> <tr><td>7</td><td>In-Banner Video Ad (User Initiated)</td></tr> <tr><td>8</td><td>Pop (e.g., Over, Under, or Upon Exit)</td></tr> <tr><td>9</td><td>Provocative or Suggestive Imagery</td></tr> <tr><td>10</td><td>Shaky, Flashing, Flickering, Extreme Animation, Smileys</td></tr> <tr><td>11</td><td>Surveys</td></tr> <tr><td>12</td><td>Text Only</td></tr> <tr><td>13</td><td>User Interactive (e.g., Embedded Games)</td></tr> <tr><td>14</td><td>Windows Dialog or Alert Style</td></tr> <tr><td>15</td><td>Has Audio On/Off Button</td></tr> <tr><td>16</td><td>Ad Provides Skip Button (e.g. VPAID-rendered skip button on pre-roll video)</td></tr> <tr><td>17</td><td>Adobe Flash</td></tr> </table>"
+		},
+		"ad_position": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 7,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>0</td><td>Unknown</td></tr> <tr><td>1</td><td>Above the Fold</td></tr> <tr><td>2</td><td>DEPRECATED - May or may not be initially visible depending on screen size/resolution.</td></tr> <tr><td>3</td><td>Below the Fold</td></tr> <tr><td>4</td><td>Header</td></tr> <tr><td>5</td><td>Footer</td></tr> <tr><td>6</td><td>Sidebar</td></tr> <tr><td>7</td><td>Full Screen</td></tr> </table>"
+		},
+		"expandable_direction": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 5,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Left</td></tr><tr><td>2</td><td>Right</td></tr><tr><td>3</td><td>Up</td></tr><tr><td>4</td><td>Down</td></tr><tr><td>5</td><td>Full Screen</td></tr></table>"
+		},
+		"api_framework": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 6,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>VPAID 1.0</td></tr><tr><td>2</td><td>VPAID 2.0</td></tr><tr><td>3</td><td>MRAID-1</td></tr><tr><td>4</td><td>ORMMA</td></tr><tr><td>5</td><td>MRAID-2</td></tr><tr><td>6</td><td>MRAID-3</td></tr></table>"
+		},
+		"video_linearity": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 2,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Linear / In-Stream</td></tr><tr><td>2</td><td>Non-Linear / Overlay</td></tr></table>"
+		},
+		"video_bid_response_protocol": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 10,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>VAST 1.0</td></tr><tr><td>2</td><td>VAST 2.0</td></tr><tr><td>3</td><td>VAST 3.0</td></tr><tr><td>4</td><td>VAST 1.0 Wrapper</td></tr><tr><td>5</td><td>VAST 2.0 Wrapper</td></tr><tr><td>6</td><td>VAST 3.0 Wrapper</td></tr><tr><td>7</td><td>VAST 4.0</td></tr><tr><td>8</td><td>VAST 4.0 Wrapper</td></tr><tr><td>9</td><td>DAAST 1.0</td></tr><tr><td>10</td><td>DAAST 1.0 Wrapper</td></tr></table>"
+		},
+		"video_placement_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 5,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>In-Stream<br>Played before, during or after the streaming video content that the consumer has requested (e.g., Pre-roll, Mid-roll, Post-roll).</td></tr><tr><td>2</td><td>In-Banner<br>Exists within a web banner that leverages the banner space to deliver a video experience as opposed to another static or rich media format. The format relies on the existence of display ad inventory on the page for its delivery.</td></tr><tr><td>3</td><td>In-Article<br>Loads and plays dynamically between paragraphs of editorial content; existing as a standalone branded message.</td></tr><tr><td>4</td><td>In-Feed - Found in content, social or product feeds.</td></tr><tr><td>5</td><td>Interstitial/Slider/Floating<br>Covers the entire or a portion of screen area, but is always on screen while displayed (i.e. cannot be scrolled out of view). Note that a full-screen interstitial(e.g., inmobile)can be distinguished from a floating/slider unit by the “imp.instl” field.</td></tr></table>"
+		},
+		"video_playback_method": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 6,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Initiates on Page Load with Sound On</td></tr><tr><td>2</td><td>Initiates on Page Load with Sound Off by Default</td></tr><tr><td>3</td><td>Initiates on Click with Sound On</td></tr><tr><td>4</td><td>Initiates on Mouse-Over with Sound On</td></tr><tr><td>5</td><td>Initiates on Entering Viewport with Sound On</td></tr><tr><td>6</td><td>Initiates on Entering Viewport with Sound Off by Default</td></tr></table>"
+		},
+		"video_playback_cessation_mode": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>On Video Completion or when Terminated by User</td></tr> <tr><td>2</td><td>OnLeaving Viewport or when Terminated by User</td></tr> <tr><td>3</td><td>On Leaving Viewport Continues as a Floating/Slider Unit until Video Completion or whenTerminated by User</td></tr> </table>"
+		},
+		"video_start_delay": {
+			"type": "integer",
+			"minimum": -2,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>>0</td><td>Mid-Roll (value indicates start delay in second)</td></tr><tr><td>0</td><td>Pre-Roll</td></tr><tr><td>-1</td><td>Generic Mid-Roll</td></tr><tr><td>-2</td><td>Generic Post-Roll</td></tr></table>"
+		},
+		"production_quality": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>0</td><td>Unknown</td></tr><tr><td>1</td><td>Professionally Produced</td></tr><tr><td>2</td><td>Prosumer</td></tr><tr><td>3</td><td>User Generated (UGC)</td></tr></table>"
+		},
+		"vast_companion_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Static Resource</td></tr><tr><td>2</td><td>HTML Resource</td></tr><tr><td>3</td><td>iframe Resource</td></tr></table>"
+		},
+		"content_delivery_method": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Streaming</td></tr><tr><td>2</td><td>Progressive</td></tr><tr><td>3</td><td>Download</td></tr></table>"
+		},
+		"audio_feed_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Music Service</td></tr><tr><td>2</td><td>FM/AM Broadcast</td></tr><tr><td>3</td><td>Podcast</td></tr></table>"
+		},
+		"volume_normalization_mode": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 4,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>0</td><td>None</td></tr><tr><td>1</td><td>Ad Volume Average Normalized to Content</td></tr><tr><td>2</td><td>Ad Volume Peak Normalized to Content</td></tr><tr><td>3</td><td>Ad Loudness Normalized to Content</td></tr><tr><td>4</td><td>Custom Volume Normalization</td></tr></table>"
+		},
+		"content_context": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 7,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>Video (i.e., video file or stream such as Internet TV broadcasts)</td></tr><tr><td>2</td><td>Game (i.e., an interactive software game)</td></tr><tr><td>3</td><td>Music (i.e., audio file or stream such as Internet radio broadcasts)</td></tr><tr><td>4</td><td>Application (i.e., an interactive software application)</td></tr><tr><td>5</td><td>Text (i.e., primarily textual document such as a web page, eBook, or news article)</td></tr><tr><td>6</td><td>Other (i.e., none of the other categories applies)</td></tr><tr><td>7</td><td>Unknown</td></tr></table>"
+		},
+		"qag_media_rating": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>All Audiences</td></tr><tr><td>2</td><td>Everyone Over 12</td></tr><tr><td>3</td><td>Mature Audiences</td></tr></table>"
+		},
+		"location_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 3,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>GPS/Location Services</td></tr><tr><td>2</td><td>IP Address</td></tr><tr><td>3</td><td>User provided (e.g., registration data)</td></tr></table>"
+		},
+		"device_type": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 7,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th><th>Notes</th></tr><tr><td>1</td><td>Mobile/Tablet</td><td>Version2.0</td></tr><tr><td>2</td><td>Personal Computer</td><td>Version 2.0</td></tr><tr><td>3</td><td>Connected TV</td><td>Version 2.0</td></tr><tr><td>4</td><td>Phone</td><td>New for Version 2.2</td></tr><tr><td>5</td><td>Tablet</td><td>New for Version 2.2</td></tr><tr><td>6</td><td>Connected Device</td><td>New for Version 2.2</td></tr><tr><td>7</td><td>Set Top Box</td><td>New for Version 2.2</td></tr></table>"
+		},
+		"connection_type": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 6,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>0</td><td>Unknown</td></tr><tr><td>1</td><td>Ethernet</td></tr><tr><td>2</td><td>WIFI</td></tr><tr><td>3</td><td>Cellular Network – Unknown Generation</td></tr><tr><td>4</td><td>Cellular Network – 2G</td></tr><tr><td>5</td><td>Cellular Network – 3G</td></tr><tr><td>6</td><td>Cellular Network – 4G</td></tr></table>"
+		},
+		"ip_location_services": {
+			"type": "integer",
+			"minimum": 1,
+			"maximum": 4,
+			"description": "<table border=\"1\"><tr><th>Value</th><th>Description</th></tr><tr><td>1</td><td>ip2location</td></tr><tr><td>2</td><td>Neustar (Quova)</td></tr><tr><td>3</td><td>MaxMind</td></tr><tr><td>4</td><td>NetAcuity (Digital Element)</td></tr></table>"
+		},
+		"currency": {
+			"type": "string",
+			"minLength": 3,
+			"maxLength": 3,
+			"pattern": "[a-zA-Z]{3}"
+		},
+		"language": {
+			"type": "string",
+			"minLength": 2,
+			"maxLength": 2
+		},
+		"boolean_int": {
+			"type": "integer",
+			"minimum": 0,
+			"maximum": 1
+		},
+		"positive_int": {
+			"type": "integer",
+			"minimum": 0
+		}
+	}
+}
+
